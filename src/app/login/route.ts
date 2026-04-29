@@ -14,7 +14,7 @@ const GOOGLE_OAUTH_CONFIG = {
 }
 
 const GET = (async (req: NextRequest) => {
-    const token = await req.cookies.get("s-token");
+    const token = req.cookies.get("s-token");
     const redirectUrl = new URL(GOOGLE_OAUTH_URL);
     for (const [key, value] of Object.entries(GOOGLE_OAUTH_CONFIG)) {
         if (Array.isArray(value)) {
