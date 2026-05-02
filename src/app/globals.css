@@ -4,11 +4,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-* {
-  font-family: system-ui;
-  color: black;
-}
-
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: var(--font-sans);
