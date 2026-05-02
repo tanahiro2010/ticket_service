@@ -1,23 +1,21 @@
-import Link from "next/link";
-import type { ReactNode } from "react";
+import Link, { type LinkProps } from "next/link";
+import type { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-type Props = {
-  children: ReactNode | string;
-  className?: string;
-  href?: string;
-};
-const Button = ({ children, className = "", href }: Props) => {
-  if (href)
+type Props = ButtonHTMLAttributes<undefined> &
+  Omit<LinkProps<undefined>, "href"> & { href?: string };
+
+const Button = (props: Props) => {
+  if (props.href)
     return (
       <Link
         className={cn(
           `px-5 py-3 border rounded hover:bg-gray-100 cursor-pointer flex flex-row justify-center items-center space-x-3`,
-          className,
+          props.className,
         )}
-        href={href}
+        href={props.href}
       >
-        {children}
+        {props.children}
       </Link>
     );
   else
@@ -25,11 +23,11 @@ const Button = ({ children, className = "", href }: Props) => {
       <button
         className={cn(
           `px-5 py-3 border rounded hover:bg-gray-100 cursor-pointer flex flex-row justify-center items-center space-x-3`,
-          className,
+          props.className,
         )}
         type={"button"}
       >
-        {children}
+        {props.children}
       </button>
     );
 };
