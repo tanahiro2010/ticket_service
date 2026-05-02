@@ -44,4 +44,5 @@ next-env.d.ts
 
 # db file
 sqlite.db
+sqlite.db-*
 certificates
