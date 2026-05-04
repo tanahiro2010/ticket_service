@@ -10,6 +10,8 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "@types/better-sqlite3": "^7.6.13",
     "better-auth": "^1.6.9",
     "better-sqlite3": "^12.9.0",
@@ -18,6 +20,7 @@
     "google-oauth-lib": "^1.0.6",
     "lucide-react": "^1.14.0",
     "next": "^16.2.4",
+    "prisma": "^7.8.0",
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
