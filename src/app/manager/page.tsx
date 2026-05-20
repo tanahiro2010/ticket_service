@@ -60,10 +60,12 @@ export default function Manager() {
       >
         チケット一覧へ
       </Link>
-      <Link 
+      <Link
         href="/manager/tickets/search"
         className="mt-5 text-sm text-gray-600 hover:text-black transition"
-      >チケット検索</Link>
+      >
+        チケット検索
+      </Link>
     </CenterCard>
   );
 }

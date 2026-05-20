@@ -34,11 +34,7 @@ function formatDate(date: Date) {
   }).format(date);
 }
 
-function buildSearchHref(params: {
-  page: number;
-  min?: number;
-  max?: number;
-}) {
+function buildSearchHref(params: { page: number; min?: number; max?: number }) {
   const query = new URLSearchParams();
 
   if (params.page > 0) {
@@ -54,10 +50,14 @@ function buildSearchHref(params: {
   }
 
   const queryString = query.toString();
-  return queryString ? `/manager/tickets/search?${queryString}` : "/manager/tickets/search";
+  return queryString
+    ? `/manager/tickets/search?${queryString}`
+    : "/manager/tickets/search";
 }
 
-export default async function TicketSearchPage({ searchParams }: SearchContext) {
+export default async function TicketSearchPage({
+  searchParams,
+}: SearchContext) {
   const { page, min, max } = await searchParams;
   const pageInt = Math.max(parseQueryInt(page) ?? 0, 0);
   const minInt = parseQueryInt(min);
@@ -69,7 +69,9 @@ export default async function TicketSearchPage({ searchParams }: SearchContext) 
   const rangeMin = Math.min(normalizedMin, normalizedMax);
   const rangeMax = Math.max(normalizedMin, normalizedMax);
   const reversedRange =
-    minInt !== undefined && maxInt !== undefined && normalizedMin > normalizedMax;
+    minInt !== undefined &&
+    maxInt !== undefined &&
+    normalizedMin > normalizedMax;
 
   const totalCount = hasSearchParams
     ? await prisma.ticket.count({
@@ -111,8 +113,7 @@ export default async function TicketSearchPage({ searchParams }: SearchContext) 
       })
     : [];
 
-  const showingFrom =
-    totalCount === 0 ? 0 : currentPage * MAX_VIEW_COUNT + 1;
+  const showingFrom = totalCount === 0 ? 0 : currentPage * MAX_VIEW_COUNT + 1;
   const showingTo = Math.min((currentPage + 1) * MAX_VIEW_COUNT, totalCount);
   const hasPreviousPage = currentPage > 0;
   const hasNextPage = currentPage + 1 < totalPages;
@@ -169,7 +170,10 @@ export default async function TicketSearchPage({ searchParams }: SearchContext) 
             </Link>
           }
         >
-          <form method="get" className="grid gap-4 px-6 py-5 sm:px-8 lg:grid-cols-4">
+          <form
+            method="get"
+            className="grid gap-4 px-6 py-5 sm:px-8 lg:grid-cols-4"
+          >
             <label className="space-y-2 text-sm font-medium text-black">
               <span className="block text-gray-600">最小index</span>
               <input
@@ -234,7 +238,11 @@ export default async function TicketSearchPage({ searchParams }: SearchContext) 
                     {currentPage + 1} / {totalPages} ページ
                   </p>
                   <Link
-                    href={buildSearchHref({ page: 0, min: rangeMin, max: rangeMax })}
+                    href={buildSearchHref({
+                      page: 0,
+                      min: rangeMin,
+                      max: rangeMax,
+                    })}
                     className="inline-flex items-center justify-center rounded border border-black bg-white px-3 py-1 text-sm font-medium text-black transition hover:bg-gray-100"
                   >
                     最初のページへ
@@ -289,13 +297,17 @@ export default async function TicketSearchPage({ searchParams }: SearchContext) 
 
                           <div className="grid gap-2 text-sm text-gray-700 sm:grid-cols-2 sm:gap-x-8">
                             <p>
-                              <span className="mr-2 text-gray-600">作成日時</span>
+                              <span className="mr-2 text-gray-600">
+                                作成日時
+                              </span>
                               <span className="font-medium text-black">
                                 {formatDate(ticket.createdAt)}
                               </span>
                             </p>
                             <p>
-                              <span className="mr-2 text-gray-600">更新日時</span>
+                              <span className="mr-2 text-gray-600">
+                                更新日時
+                              </span>
                               <span className="font-medium text-black">
                                 {formatDate(ticket.updatedAt)}
                               </span>
@@ -357,7 +369,10 @@ export default async function TicketSearchPage({ searchParams }: SearchContext) 
             ) : null}
           </SectionCard>
         ) : (
-          <SectionCard title="使い方" description="まずは範囲を指定して検索してください。">
+          <SectionCard
+            title="使い方"
+            description="まずは範囲を指定して検索してください。"
+          >
             <div className="px-6 py-12 sm:px-8">
               <div className="max-w-2xl space-y-3 text-sm leading-6 text-gray-600 sm:text-base">
                 <p>
