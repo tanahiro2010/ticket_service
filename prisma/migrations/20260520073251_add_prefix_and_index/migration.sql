@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Ticket" ADD COLUMN     "index" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "prefix" TEXT NOT NULL DEFAULT 'A';
