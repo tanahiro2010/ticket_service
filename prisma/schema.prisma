@@ -83,7 +83,10 @@ model Verification {
 model Ticket {
   id String @id @default(cuid())
 
+  count  Int          @default(autoincrement())
   num    String
+  prefix String       @default("A")
+  index  Int          @default(0)
   status TicketStatus @default(OPEN)
 
   rawAnswer Json @default("{}")

@@ -30,6 +30,8 @@ export async function POST(req: NextRequest) {
     const result = await prisma.ticket.create({
       data: {
         num: venue + receptionNumber,
+        prefix: venue,
+        index: Number.parseInt(receptionNumber, 10),
         rawAnswer: rawData,
       },
     });
