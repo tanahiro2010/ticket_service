@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       data: {
         num: venue + receptionNumber,
         prefix: venue,
-        index: parseInt(receptionNumber),
+        index: Number.parseInt(receptionNumber, 10),
         rawAnswer: rawData,
       },
     });
