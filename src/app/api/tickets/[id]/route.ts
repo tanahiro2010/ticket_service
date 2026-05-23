@@ -61,15 +61,26 @@ const PUT = (req: NextRequest, ctx: Context) =>
         if (!id) return apiResponse.badRequest("チケットIDが必要です");
         if (!status) return apiResponse.badRequest("ステータスが必要です");
 
-        const ticket = await prisma.ticket.findUnique({
-          where: { id },
-        });
+        const ticket = await prisma.ticket.findUnique({ where: { id } });
 
         if (!ticket) {
           return apiResponse.notFound("チケットが見つかりません");
         }
 
         const payload: TicketUpdateInput = { status };
+
+        // If we're moving a skipped (CALLED) ticket back to OPEN (待機),
+        // place it at the end of the current in-venue / waiting queue by
+        // bumping its numeric `index` to (max existing index) + 1.
+        if (ticket.status === "CALLED" && status === "OPEN") {
+          const agg = await prisma.ticket.aggregate({
+            where: { status: { in: ["ENTERED", "OPEN"] } },
+            _max: { index: true },
+          });
+          const maxIndex = agg._max.index ?? 0;
+          payload.index = maxIndex + 1;
+        }
+
         if (status === "CLOSED") {
           payload.closedAt = new Date();
         }
