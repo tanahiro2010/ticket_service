@@ -78,7 +78,7 @@ const PUT = (req: NextRequest, ctx: Context) =>
             payload.index = maxIndex + 1;
           }
 
-          if (status === "ENTERED") {
+          if (status === "ENTERED" && t.status !== "ENTERED") {
             const aggEntered = await tx.ticket.aggregate({
               where: { status: "ENTERED", prefix: t.prefix },
               _max: { index: true },
