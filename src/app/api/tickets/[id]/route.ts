@@ -13,9 +13,9 @@ const GET = (req: NextRequest, ctx: Context) =>
   withAuth<Context>(
     req,
     async (_: NextRequest, user: Partial<User>, ctx: Context | undefined) => {
-      if (!user?.email?.endsWith("@sandagakuen.ed.jp")) {
+      if (!user?.email?.endsWith("@sandagakuen.ed.jp"))
         return apiResponse.forbidden("アクセスが拒否されました");
-      }
+
       if (!ctx)
         return apiResponse.internalServerError(
           "チケットIDの取得に失敗しました",
@@ -29,9 +29,7 @@ const GET = (req: NextRequest, ctx: Context) =>
           where: { id },
         });
 
-        if (!ticket) {
-          return apiResponse.notFound("チケットが見つかりません");
-        }
+        if (!ticket) return apiResponse.notFound("チケットが見つかりません");
 
         return apiResponse.success(ticket);
       } catch (e) {
@@ -46,9 +44,9 @@ const PUT = (req: NextRequest, ctx: Context) =>
   withAuth<Context>(
     req,
     async (_: NextRequest, user: Partial<User>, ctx: Context | undefined) => {
-      if (!user?.email?.endsWith("@sandagakuen.ed.jp")) {
+      if (!user?.email?.endsWith("@sandagakuen.ed.jp"))
         return apiResponse.forbidden("アクセスが拒否されました");
-      }
+
       if (!ctx)
         return apiResponse.internalServerError(
           "チケットIDの取得に失敗しました",
@@ -87,16 +85,13 @@ const PUT = (req: NextRequest, ctx: Context) =>
             payload.index = maxEntered + 1;
           }
 
-          if (status === "CLOSED") {
-            payload.closedAt = new Date();
-          }
+          if (status === "CLOSED") payload.closedAt = new Date();
 
           return tx.ticket.update({ where: { id }, data: payload });
         });
 
-        if (!updatedTicket) {
+        if (!updatedTicket)
           return apiResponse.notFound("チケットが見つかりません");
-        }
 
         return apiResponse.success(updatedTicket);
       } catch (e) {
