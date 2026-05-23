@@ -107,12 +107,16 @@ export default function Monitor() {
       {showStageModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="w-full max-w-md rounded bg-white p-6">
-            <h2 className="mb-4 text-lg font-semibold">ステージを選択してください</h2>
+            <h2 className="mb-4 text-lg font-semibold">
+              ステージを選択してください
+            </h2>
             {isStageLoading ? (
               <p>読み込み中...</p>
             ) : stages.length === 0 ? (
               <div>
-                <p className="mb-3 text-sm text-gray-600">利用可能なステージが見つかりません。手動で入力してください。</p>
+                <p className="mb-3 text-sm text-gray-600">
+                  利用可能なステージが見つかりません。手動で入力してください。
+                </p>
                 <input
                   type="text"
                   placeholder="例: A"
@@ -151,118 +155,120 @@ export default function Monitor() {
           </div>
         </div>
       )}
-    <PageShell
-      className="px-3 py-4 sm:px-5 sm:py-6 lg:px-8 lg:py-8"
-      contentClassName="flex h-[calc(100vh-2rem)] max-w-7xl flex-col gap-3 sm:gap-4 lg:gap-6"
-    >
-      <header className="flex items-center justify-between rounded-lg border border-black bg-white px-4 py-3 sm:px-6 sm:py-4">
-        <div>
-          <h1 className="text-lg font-bold sm:text-2xl">呼び出しモニター</h1>
-          <p className="text-xs text-gray-600 sm:text-sm">
-            現在の呼び出し状況を表示しています
-          </p>
-        </div>
-        <div className="text-right">
-          <p className="text-[11px] text-gray-500 sm:text-xs">更新間隔</p>
-          <p className="text-sm font-semibold sm:text-base">5秒</p>
-        </div>
-      </header>
+      <PageShell
+        className="px-3 py-4 sm:px-5 sm:py-6 lg:px-8 lg:py-8"
+        contentClassName="flex h-[calc(100vh-2rem)] max-w-7xl flex-col gap-3 sm:gap-4 lg:gap-6"
+      >
+        <header className="flex items-center justify-between rounded-lg border border-black bg-white px-4 py-3 sm:px-6 sm:py-4">
+          <div>
+            <h1 className="text-lg font-bold sm:text-2xl">呼び出しモニター</h1>
+            <p className="text-xs text-gray-600 sm:text-sm">
+              現在の呼び出し状況を表示しています
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-[11px] text-gray-500 sm:text-xs">更新間隔</p>
+            <p className="text-sm font-semibold sm:text-base">5秒</p>
+          </div>
+        </header>
 
-      <div className="grid flex-1 grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6">
-        <SectionCard
-          className="flex min-h-0 flex-col"
-          title="今、相談中の方"
-          bodyClassName="flex min-h-0 flex-1 flex-col gap-3 p-3 sm:p-5"
-        >
-          {isLoading ? (
-            <div className="flex flex-1 items-center justify-center">
-              <p className="text-sm text-gray-600 sm:text-base">
-                読み込み中...
-              </p>
-            </div>
-          ) : meetingTickets.length === 0 ? (
-            <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 text-center">
-              <p className="text-sm text-gray-600 sm:text-base">
-                現在相談中の方はいません
-              </p>
-            </div>
-          ) : (
-            <div className="grid flex-1 grid-cols-1 gap-3 sm:grid-cols-2">
-              {meetingTickets.map((ticket, index) => (
-                <article
-                  key={ticket.id}
-                  className="flex flex-col justify-between rounded-lg border border-black bg-black p-4 text-white sm:p-5"
-                >
-                  <p className="text-xs text-gray-200 sm:text-sm">
-                    相談中 {index + 1}
-                  </p>
-                  <p className="mt-3 text-4xl font-bold leading-none sm:text-6xl">
-                    {ticket.num}
-                  </p>
-                  <p className="mt-4 text-xs text-gray-200 sm:text-sm">
-                    受付番号
-                  </p>
-                </article>
-              ))}
-            </div>
-          )}
-        </SectionCard>
-
-        <section className="grid min-h-0 grid-cols-1 gap-3 sm:gap-4">
+        <div className="grid flex-1 grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6">
           <SectionCard
             className="flex min-h-0 flex-col"
-            title="次に呼ばれる方（最大5件）"
-            description="先頭の方を次に呼び出します"
-            bodyClassName="mt-3 min-h-0 flex-1 overflow-auto px-3 pb-3 sm:px-4 sm:pb-4"
+            title="今、相談中の方"
+            bodyClassName="flex min-h-0 flex-1 flex-col gap-3 p-3 sm:p-5"
           >
-            {openTickets.length === 0 ? (
-              <p className="text-sm text-gray-500">待機中の方はいません</p>
+            {isLoading ? (
+              <div className="flex flex-1 items-center justify-center">
+                <p className="text-sm text-gray-600 sm:text-base">
+                  読み込み中...
+                </p>
+              </div>
+            ) : meetingTickets.length === 0 ? (
+              <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 text-center">
+                <p className="text-sm text-gray-600 sm:text-base">
+                  現在相談中の方はいません
+                </p>
+              </div>
             ) : (
-              <ul className="space-y-2">
-                {openTickets.slice(0, 5).map((ticket, index) => (
-                  <li
+              <div className="grid flex-1 grid-cols-1 gap-3 sm:grid-cols-2">
+                {meetingTickets.map((ticket, index) => (
+                  <article
                     key={ticket.id}
-                    className="flex items-center justify-between rounded border border-black px-3 py-2"
+                    className="flex flex-col justify-between rounded-lg border border-black bg-black p-4 text-white sm:p-5"
                   >
-                    <span className="text-sm text-gray-700">
-                      {index + 1}番目
-                    </span>
-                    <span className="text-xl font-bold">{ticket.num}</span>
-                  </li>
+                    <p className="text-xs text-gray-200 sm:text-sm">
+                      相談中 {index + 1}
+                    </p>
+                    <p className="mt-3 text-4xl font-bold leading-none sm:text-6xl">
+                      {ticket.num}
+                    </p>
+                    <p className="mt-4 text-xs text-gray-200 sm:text-sm">
+                      受付番号
+                    </p>
+                  </article>
                 ))}
-              </ul>
+              </div>
             )}
           </SectionCard>
 
-          <SectionCard
-            className="flex min-h-0 flex-col"
-            title="スキップした方"
-            description="呼び出し時に不在だった方"
-            bodyClassName="mt-3 min-h-0 flex-1 overflow-auto px-3 pb-3 sm:px-4 sm:pb-4"
-          >
-            {skippedTickets.length === 0 ? (
-              <p className="text-sm text-gray-500">現在はいません</p>
-            ) : (
-              <ul className="space-y-2">
-                {skippedTickets.map((ticket) => (
-                  <li
-                    key={ticket.id}
-                    className="flex items-center justify-between rounded border border-gray-300 px-3 py-2"
-                  >
-                    <span className="text-sm text-gray-700">番号</span>
-                    <span className="text-lg font-semibold">{ticket.num}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </SectionCard>
-        </section>
-      </div>
+          <section className="grid min-h-0 grid-cols-1 gap-3 sm:gap-4">
+            <SectionCard
+              className="flex min-h-0 flex-col"
+              title="次に呼ばれる方（最大5件）"
+              description="先頭の方を次に呼び出します"
+              bodyClassName="mt-3 min-h-0 flex-1 overflow-auto px-3 pb-3 sm:px-4 sm:pb-4"
+            >
+              {openTickets.length === 0 ? (
+                <p className="text-sm text-gray-500">待機中の方はいません</p>
+              ) : (
+                <ul className="space-y-2">
+                  {openTickets.slice(0, 5).map((ticket, index) => (
+                    <li
+                      key={ticket.id}
+                      className="flex items-center justify-between rounded border border-black px-3 py-2"
+                    >
+                      <span className="text-sm text-gray-700">
+                        {index + 1}番目
+                      </span>
+                      <span className="text-xl font-bold">{ticket.num}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </SectionCard>
 
-      <footer className="rounded-lg border border-black bg-white px-4 py-2 text-xs text-gray-600 sm:px-6 sm:text-sm">
-        次回予定: {nextTicket ? `受付番号 ${nextTicket.num}` : "なし"}
-      </footer>
-    </PageShell>
+            <SectionCard
+              className="flex min-h-0 flex-col"
+              title="スキップした方"
+              description="呼び出し時に不在だった方"
+              bodyClassName="mt-3 min-h-0 flex-1 overflow-auto px-3 pb-3 sm:px-4 sm:pb-4"
+            >
+              {skippedTickets.length === 0 ? (
+                <p className="text-sm text-gray-500">現在はいません</p>
+              ) : (
+                <ul className="space-y-2">
+                  {skippedTickets.map((ticket) => (
+                    <li
+                      key={ticket.id}
+                      className="flex items-center justify-between rounded border border-gray-300 px-3 py-2"
+                    >
+                      <span className="text-sm text-gray-700">番号</span>
+                      <span className="text-lg font-semibold">
+                        {ticket.num}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </SectionCard>
+          </section>
+        </div>
+
+        <footer className="rounded-lg border border-black bg-white px-4 py-2 text-xs text-gray-600 sm:px-6 sm:text-sm">
+          次回予定: {nextTicket ? `受付番号 ${nextTicket.num}` : "なし"}
+        </footer>
+      </PageShell>
     </>
   );
 }
