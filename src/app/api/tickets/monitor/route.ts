@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { apiResponse } from "@/lib/response";
 
@@ -7,7 +7,7 @@ const GET = async (req: NextRequest) => {
   if (!stage) {
     return apiResponse.badRequest("ステージパラメータが必要です");
   }
-  
+
   try {
     // Reduce DB load by requesting only required fields.
     // Keep queries parallel (Promise.all) to avoid long transactions.
