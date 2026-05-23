@@ -7,9 +7,6 @@ const GET = async (req: NextRequest) => {
   if (!stage) {
     return apiResponse.badRequest("ステージパラメータが必要です");
   }
-  if (!["A", "B", "C"].includes(stage)) {
-    return apiResponse.badRequest("無効なステージパラメータ");
-  }
   
   try {
     // Reduce DB load by requesting only required fields.
