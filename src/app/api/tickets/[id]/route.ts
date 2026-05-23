@@ -61,23 +61,42 @@ const PUT = (req: NextRequest, ctx: Context) =>
         if (!id) return apiResponse.badRequest("チケットIDが必要です");
         if (!status) return apiResponse.badRequest("ステータスが必要です");
 
-        const ticket = await prisma.ticket.findUnique({
-          where: { id },
+        // Run find/aggregate/update inside a single transaction to reduce
+        // round-trips and improve consistency.
+        const updatedTicket = await prisma.$transaction(async (tx) => {
+          const t = await tx.ticket.findUnique({ where: { id } });
+          if (!t) return null;
+
+          const payload: TicketUpdateInput = { status };
+
+          if (t.status === "CALLED" && status === "OPEN") {
+            const agg = await tx.ticket.aggregate({
+              where: { status: { in: ["ENTERED", "OPEN"] }, prefix: t.prefix },
+              _max: { index: true },
+            });
+            const maxIndex = agg._max.index ?? 0;
+            payload.index = maxIndex + 1;
+          }
+
+          if (status === "ENTERED" && t.status !== "ENTERED") {
+            const aggEntered = await tx.ticket.aggregate({
+              where: { status: "ENTERED", prefix: t.prefix },
+              _max: { index: true },
+            });
+            const maxEntered = aggEntered._max.index ?? 0;
+            payload.index = maxEntered + 1;
+          }
+
+          if (status === "CLOSED") {
+            payload.closedAt = new Date();
+          }
+
+          return tx.ticket.update({ where: { id }, data: payload });
         });
 
-        if (!ticket) {
+        if (!updatedTicket) {
           return apiResponse.notFound("チケットが見つかりません");
         }
-
-        const payload: TicketUpdateInput = { status };
-        if (status === "CLOSED") {
-          payload.closedAt = new Date();
-        }
-
-        const updatedTicket = await prisma.ticket.update({
-          where: { id },
-          data: payload,
-        });
 
         return apiResponse.success(updatedTicket);
       } catch (e) {

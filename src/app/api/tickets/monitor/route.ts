@@ -1,7 +1,13 @@
+import type { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { apiResponse } from "@/lib/response";
 
-const GET = async () => {
+const GET = async (req: NextRequest) => {
+  const stage = req.nextUrl.searchParams.get("stage");
+  if (!stage) {
+    return apiResponse.badRequest("ステージパラメータが必要です");
+  }
+
   try {
     // Reduce DB load by requesting only required fields.
     // Keep queries parallel (Promise.all) to avoid long transactions.
@@ -9,6 +15,7 @@ const GET = async () => {
       prisma.ticket.findMany({
         where: {
           status: { in: ["CALLING", "MEETING"] },
+          prefix: stage,
         },
         orderBy: [{ status: "asc" }, { num: "asc" }],
         take: 3,
@@ -21,7 +28,10 @@ const GET = async () => {
         },
       }),
       prisma.ticket.findMany({
-        where: { status: "CALLED" },
+        where: {
+          status: "CALLED",
+          prefix: stage,
+        },
         orderBy: [{ updatedAt: "desc" }, { num: "asc" }],
         take: 8,
         select: {
@@ -32,12 +42,15 @@ const GET = async () => {
         },
       }),
       prisma.ticket.findMany({
-        where: { status: { in: ["ENTERED", "OPEN"] } },
-        orderBy: [{ num: "asc" }],
+        where: { status: { in: ["ENTERED", "OPEN"] }, prefix: stage },
+        // Use numeric `index` for ordering so tickets moved back to the queue
+        // can be placed at the end by updating their `index` value.
+        orderBy: [{ index: "asc" }],
         take: 5,
         select: {
           id: true,
           num: true,
+          index: true,
           status: true,
           createdAt: true,
         },
