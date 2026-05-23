@@ -17,13 +17,51 @@ export default function Monitor() {
   const [openTickets, setOpenTickets] = useState<Ticket[]>([]);
   const [meetingTickets, setMeetingTickets] = useState<Ticket[]>([]);
   const [skippedTickets, setSkippedTickets] = useState<Ticket[]>([]);
+  const [stage, setStage] = useState<string | null>(null);
+  const [stages, setStages] = useState<string[]>([]);
+  const [isStageLoading, setIsStageLoading] = useState(true);
+  const [showStageModal, setShowStageModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Load available stages and remember last selected stage.
   useEffect(() => {
     let cancelled = false;
 
+    const loadStages = async () => {
+      try {
+        const response = await fetch("/api/tickets/stages");
+        const data = await response.json();
+        if (response.ok && Array.isArray(data.data)) {
+          setStages(data.data as string[]);
+        }
+      } catch (e) {
+        console.error(e);
+      } finally {
+        if (cancelled) return;
+        setIsStageLoading(false);
+        const saved = sessionStorage.getItem("monitor_stage");
+        if (saved) {
+          setStage(saved);
+        } else {
+          setShowStageModal(true);
+        }
+      }
+    };
+
+    void loadStages();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Start polling only after a stage is selected.
+  useEffect(() => {
+    if (!stage) return;
+    let cancelled = false;
+
     const fetchTickets = async (): Promise<TicketsResult> => {
-      const response = await fetch("/api/tickets/monitor");
+      const url = `/api/tickets/monitor?stage=${encodeURIComponent(stage)}`;
+      const response = await fetch(url);
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error);
@@ -60,11 +98,59 @@ export default function Monitor() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [stage]);
 
   const nextTicket = openTickets[0];
 
   return (
+    <>
+      {showStageModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded bg-white p-6">
+            <h2 className="mb-4 text-lg font-semibold">ステージを選択してください</h2>
+            {isStageLoading ? (
+              <p>読み込み中...</p>
+            ) : stages.length === 0 ? (
+              <div>
+                <p className="mb-3 text-sm text-gray-600">利用可能なステージが見つかりません。手動で入力してください。</p>
+                <input
+                  type="text"
+                  placeholder="例: A"
+                  className="w-full rounded border px-3 py-2"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      const val = (e.target as HTMLInputElement).value.trim();
+                      if (val) {
+                        sessionStorage.setItem("monitor_stage", val);
+                        setStage(val);
+                        setShowStageModal(false);
+                        setIsLoading(true);
+                      }
+                    }
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="grid gap-2">
+                {stages.map((s) => (
+                  <button
+                    key={s}
+                    className="rounded border px-3 py-2 text-left hover:bg-gray-100"
+                    onClick={() => {
+                      sessionStorage.setItem("monitor_stage", s);
+                      setStage(s);
+                      setShowStageModal(false);
+                      setIsLoading(true);
+                    }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     <PageShell
       className="px-3 py-4 sm:px-5 sm:py-6 lg:px-8 lg:py-8"
       contentClassName="flex h-[calc(100vh-2rem)] max-w-7xl flex-col gap-3 sm:gap-4 lg:gap-6"
@@ -177,5 +263,6 @@ export default function Monitor() {
         次回予定: {nextTicket ? `受付番号 ${nextTicket.num}` : "なし"}
       </footer>
     </PageShell>
+    </>
   );
 }
