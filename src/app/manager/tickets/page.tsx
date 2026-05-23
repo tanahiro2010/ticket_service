@@ -1,8 +1,10 @@
-import Link from "next/link";
-import { SectionCard } from "@/components/ui/SectionCard";
-import { statusMap } from "@/constants/status";
 import type { TicketStatus } from "@/generated/prisma/enums";
+import type { TicketWhereInput } from "@/generated/prisma/models";
+import { statusMap } from "@/constants/status";
 import { prisma } from "@/lib/prisma";
+import { SectionCard } from "@/components/ui/SectionCard";
+import Link from "next/link";
+
 
 type TicketsProps = {
   searchParams: Promise<{ page?: string; today?: string }>;
@@ -36,7 +38,7 @@ export default async function Tickets({ searchParams }: TicketsProps) {
   const normalizedPage =
     Number.isNaN(requestedPage) || requestedPage < 0 ? 0 : requestedPage;
 
-  const where: any = {};
+  const where: TicketWhereInput = {};
   if (onlyToday) {
     const start = new Date();
     start.setHours(0, 0, 0, 0);
