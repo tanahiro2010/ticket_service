@@ -10,7 +10,7 @@ const GET = async (req: NextRequest) => {
 
   try {
     // Reduce DB load by requesting only required fields.
-    // Keep queries parallel (Promise.all) to avoid long transactions.
+    // Execute related reads in a single transaction for consistency
     const [calling, skipped, nextCandidates] = await prisma.$transaction([
       prisma.ticket.findMany({
         where: {
