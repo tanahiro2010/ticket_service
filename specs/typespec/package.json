@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
+  "scripts": {
+    "build": "tsp compile main.tsp",
+    "check": "tsp compile main.tsp"
+  },
   "dependencies": {
     "@typespec/compiler": "^1.12.0",
     "@typespec/http": "^1.12.0",
