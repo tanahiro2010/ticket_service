@@ -8,7 +8,9 @@
     "start": "next start",
     "db:migration": "prisma migrate deploy",
     "lint": "biome check --fix",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "typespec:build": "cd specs/typespec && npx tsp compile main.tsp",
+    "typespec:check": "cd specs/typespec && npx tsp compile main.tsp"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
