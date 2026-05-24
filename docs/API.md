@@ -5,7 +5,7 @@
 ## TypeSpec について
 
 - API 仕様の正本は `specs/typespec/main.tsp` とします。
-- OpenAPI 生成は `specs/typespec` で `npx tsp compile main.tsp` を実行してください。
+- OpenAPI 生成は `specs/typespec` で `bun install --frozen-lockfile` の後に `bun run check` を実行してください。
 - 生成物は `specs/typespec/tsp-output/schema/` に出力されます。
 - 実装変更時は TypeSpec も同時に更新してください。
 
