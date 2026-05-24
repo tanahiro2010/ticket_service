@@ -96,3 +96,9 @@ Vercel などのプラットフォームにデプロイ可能です。デプロ�
 ## 問い合わせ
 
 不明点があればこのリポジトリの Issues を作成してください。
+
+
+## badge
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/unischool-sg/ticket_service)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub issues](https://img.shields.io/github/issues/unischool-sg/ticket_service)](https://github.com/unischool-sg/ticket_service/issues)
