@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "tsp compile main.tsp",
-    "check": "tsp compile main.tsp"
+    "check": "tsp compile main.tsp --no-emit"
   },
   "dependencies": {
     "@typespec/compiler": "^1.12.0",
