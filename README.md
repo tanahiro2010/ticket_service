@@ -9,7 +9,7 @@
 - フレームワーク: Next.js (App Router)
 - 言語: TypeScript
 - ORM: Prisma
-- データベース: (Prisma 経由で接続する任意の RDBMS)
+- データベース: PostgreSQL（Prisma 経由）
 - その他: Sonner（通知）、Google OAuth（認証用アイコンが存在）、Cloud Functions スクリプト（`scripts/forms.gs.js`）など
 
 ## 事前準備
