@@ -2,6 +2,13 @@
 
 このドキュメントは `src/app/api` 以下に実装された主要 API エンドポイントの概要です。
 
+## TypeSpec について
+
+- API 仕様の正本は `specs/typespec/main.tsp` とします。
+- OpenAPI 生成は `specs/typespec` で `npx tsp compile main.tsp` を実行してください。
+- 生成物は `specs/typespec/tsp-output/schema/` に出力されます。
+- 実装変更時は TypeSpec も同時に更新してください。
+
 注意: すべてのレスポンスは `src/lib/response.ts` の `apiResponse` を通して返され、成功時は `{ success: true, message, data }`、失敗時は `{ success: false, error }` 形式です。
 
 ## 認証
